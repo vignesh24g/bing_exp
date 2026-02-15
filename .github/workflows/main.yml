@@ -1,0 +1,21 @@
+name: Bing Rewards Daily
+on:
+  schedule:
+    - cron: '15 5 * * *' # Runs at 10:45 AM IST daily
+  workflow_dispatch:
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install playwright faker
+          playwright install chromium --with-deps
+      - name: Run Script
+        run: python bing_search.py
