@@ -11,7 +11,7 @@ def run_searches():
         # --- DESKTOP SEARCHES (approx 30-50 daily) ---
         print("🖥️ Starting Desktop Searches...")
         desktop_context = browser.new_context(
-            storage_state="auth.json",
+            storage_state="auth_vizz.json",
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
         desktop_page = desktop_context.new_page()
@@ -26,7 +26,7 @@ def run_searches():
         # --- MOBILE SEARCHES (approx 20 daily) ---
         print("\n📱 Starting Mobile Searches...")
         mobile_context = browser.new_context(
-            storage_state="auth.json",
+            storage_state="auth_vizz.json",
             # Mobile User-Agent + Viewport triggers mobile points
             user_agent="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Mobile Safari/537.36",
             viewport={'width': 375, 'height': 667},
@@ -34,7 +34,7 @@ def run_searches():
         )
         mobile_page = mobile_context.new_page()
 
-        for i in range(20):
+        for i in range(30):
             query = fake.word() + " " + fake.word()
             mobile_page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[Mobile {i+1}/20] {query}")
@@ -46,40 +46,3 @@ def run_searches():
 if __name__ == "__main__":
     run_searches()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''import random, time, os
-from playwright.sync_api import sync_playwright
-from faker import Faker
-
-def run_searches():
-    fake = Faker()
-    with sync_playwright() as p:
-        # Load the saved session from auth.json
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(storage_state="auth.json")
-        page = context.new_page()
-
-        for i in range(50):
-            query = fake.sentence(nb_words=random.randint(2, 4)).replace(".", "")
-            page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
-            
-            print(f"[{i+1}/50] Searched: {query}")
-            # Random wait to mimic human behavior
-            time.sleep(random.randint(15, 35))
-            
-        browser.close()
-
-if __name__ == "__main__":
-    run_searches()'''
