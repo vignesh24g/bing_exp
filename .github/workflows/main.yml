@@ -17,5 +17,5 @@ jobs:
           playwright install chromium --with-deps
       - name: Run Script
         run: |
-          python bing_search_vizz.py
           python bing_search_24gv.py
+          python bing_search_vizz.py
