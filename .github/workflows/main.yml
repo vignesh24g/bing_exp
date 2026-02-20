@@ -1,7 +1,5 @@
 name: Bing Rewards Daily
 on:
-  schedule:
-    - cron: '0 6,18 * * *' # Runs at 10:45 AM IST daily
   workflow_dispatch:
 
 jobs:
@@ -18,4 +16,6 @@ jobs:
           pip install playwright faker
           playwright install chromium --with-deps
       - name: Run Script
-        run: python bing_search.py
+        run: |
+          python bing_search_vizz.py
+          python bing_search_24gv.py
