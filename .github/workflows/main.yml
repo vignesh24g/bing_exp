@@ -1,7 +1,7 @@
 name: Bing Rewards Daily
 on:
   schedule:
-    - cron: '0 0 * * *'   # runs daily at 12:00 AM UTC (5:30 AM IST)
+    - cron: '0 12 * * *'   # runs daily at 12:00 PM UTC (5:30 PM IST)
   workflow_dispatch:
 
 jobs:
