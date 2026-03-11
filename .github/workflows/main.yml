@@ -2,22 +2,49 @@ name: Bing Rewards Daily
 on:
   schedule:
     - cron: '0 12 * * *'   # runs daily at 12:00 PM UTC (5:30 PM IST)
-  workflow_dispatch:
+  workflow_dispatch:      # allows you to run it manually for testing
 
 jobs:
   search:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          # Built-in caching for pip dependencies listed in requirements.txt
+          cache: 'pip'
+
+      - name: Cache Playwright Binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          # The key ensures that if you change requirements.txt, a new cache is created
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
       - name: Install dependencies
         run: |
-          pip install playwright faker
-          playwright install chromium --with-deps
-      - name: Run Script
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+          # Only download the browser if it's not found in the cache
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
+            echo "Cache miss: Downloading Playwright browser..."
+            playwright install chromium --with-deps
+          else
+            echo "Cache hit: Using existing Playwright browser..."
+            # Still run install-deps to ensure Linux system libraries are present (very fast)
+            playwright install-deps chromium
+          fi
+
+      - name: Run Scripts
         run: |
           python bing_search_24gv.py
           python bing_search_vizz.py
+
