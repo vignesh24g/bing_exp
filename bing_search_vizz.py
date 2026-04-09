@@ -34,7 +34,7 @@ def run_searches():
         )
         mobile_page = mobile_context.new_page()
 
-        for i in range(25):
+        for i in range(60):
             query = fake.word() + " " + fake.word()
             mobile_page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[Mobile {i+1}/20] {query}")
