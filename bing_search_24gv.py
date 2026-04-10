@@ -16,7 +16,7 @@ def run_searches():
         )
         desktop_page = desktop_context.new_page()
         
-        for i in range(40):
+        for i in range(50):
             query = fake.sentence(nb_words=random.randint(2, 3)).replace(".", "")
             desktop_page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[PC {i+1}/30] {query}")
