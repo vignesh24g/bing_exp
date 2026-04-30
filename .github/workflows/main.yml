@@ -9,21 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        # Updated from v4 to v5
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        # Updated from v5 to v6
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-          # Built-in caching for pip dependencies listed in requirements.txt
           cache: 'pip'
 
       - name: Cache Playwright Binaries
-        uses: actions/cache@v4
+        # Updated from v4 to v5
+        uses: actions/cache@v5
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          # The key ensures that if you change requirements.txt, a new cache is created
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
@@ -33,13 +34,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-          # Only download the browser if it's not found in the cache
           if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
             echo "Cache miss: Downloading Playwright browser..."
             playwright install chromium --with-deps
           else
             echo "Cache hit: Using existing Playwright browser..."
-            # Still run install-deps to ensure Linux system libraries are present (very fast)
             playwright install-deps chromium
           fi
 
@@ -47,4 +46,3 @@ jobs:
         run: |
           python bing_search_24gv.py
           python bing_search_vizz.py
-
