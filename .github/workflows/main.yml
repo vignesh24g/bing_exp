@@ -41,6 +41,8 @@ jobs:
             echo "Cache hit: Using existing Playwright browser..."
             playwright install-deps chromium
           fi
+      - name: Install Playwright Browsers
+        run: python -m playwright install --with-deps
 
       - name: Run Scripts
         run: |
