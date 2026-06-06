@@ -2,6 +2,19 @@ import random, time, os
 from playwright.sync_api import sync_playwright
 from faker import Faker
 
+def safe_goto(page, url, max_retries=3):
+    """Navigate to URL with retry logic"""
+    for attempt in range(max_retries):
+        try:
+            page.goto(url, timeout=30000)
+            return
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"  ⚠️ Attempt {attempt + 1} failed: {str(e)[:50]}... Retrying...")
+                time.sleep(2)  # Wait before retry
+            else:
+                print(f"  ❌ Failed after {max_retries} attempts. Skipping...")
+
 def run_searches():
     fake = Faker()
     with sync_playwright() as p:
@@ -18,7 +31,7 @@ def run_searches():
         
         for i in range(50):
             query = fake.sentence(nb_words=random.randint(2, 3)).replace(".", "")
-            desktop_page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
+            safe_goto(desktop_page, f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[PC {i+1}/30] {query}")
             time.sleep(random.randint(3, 7)) # Optimized speed
         desktop_context.close()
@@ -36,7 +49,7 @@ def run_searches():
 
         for i in range(50):
             query = fake.word() + " " + fake.word()
-            mobile_page.goto(f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
+            safe_goto(mobile_page, f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[Mobile {i+1}/20] {query}")
             time.sleep(random.randint(3, 7)) # Optimized speed
         mobile_context.close()
