@@ -29,7 +29,7 @@ def run_searches():
         )
         desktop_page = desktop_context.new_page()
         
-        for i in range(80):
+        for i in range(100):
             query = fake.sentence(nb_words=random.randint(2, 3)).replace(".", "")
             safe_goto(desktop_page, f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[PC {i+1}/50] {query}")
@@ -47,7 +47,7 @@ def run_searches():
         )
         mobile_page = mobile_context.new_page()
 
-        for i in range(60):
+        for i in range(10):
             query = fake.word() + " " + fake.word()
             safe_goto(mobile_page, f"https://www.bing.com/search?q={query}&PC=U316&FORM=CHROMN")
             print(f"[Mobile {i+1}/20] {query}")
